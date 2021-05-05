@@ -1,5 +1,12 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+import CKEditor from 'ckeditor4-vue';
 
-createApp(App).use(router).mount('#app')
+// Main styles
+import '@/assets/main.css';
+
+createApp(App)
+  .use(CKEditor)
+  .use(router)
+  .mount('#app');
