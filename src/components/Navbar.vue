@@ -16,7 +16,7 @@
             <router-link class="a" :to="{ name: 'Login' }">Login</router-link>
           </li>
           <li>
-            <router-link class="btn-primary" :to="{ name: 'Join' }"
+            <router-link class="btn btn-primary" :to="{ name: 'Join' }"
               >Join Us</router-link
             >
           </li>
@@ -29,7 +29,7 @@
           </li>
           <li>
             <router-link
-              class="btn-primary"
+              class="btn btn-primary"
               :to="{ name: 'Join' }"
               @click="handleLogout"
               >Log out</router-link
@@ -92,11 +92,6 @@ nav a {
 a:hover,
 .router-link-exact-active,
 .a:hover {
-  color: var(--primary-color);
-}
-.btn-primary:hover {
-  background: transparent;
-  border: 1px solid var(--primary-color);
   color: var(--primary-color);
 }
 .nav-auth {

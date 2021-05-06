@@ -8,7 +8,7 @@
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis
           placeat eaque minima assumenda eligendi et!
         </p>
-        <router-link class="btn-primary" :to="{ name: 'Join' }"
+        <router-link class="btn btn-primary" :to="{ name: 'Join' }"
           >Join Us</router-link
         >
       </div>
