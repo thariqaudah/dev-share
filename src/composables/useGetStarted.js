@@ -3,7 +3,7 @@ import { auth } from '../firebase/config';
 
 const error = ref(null);
 
-const join = async (name, email, password) => {
+const getStarted = async (name, email, password) => {
   error.value = null;
 
   try {
@@ -24,8 +24,8 @@ const join = async (name, email, password) => {
   }
 };
 
-const useJoin = () => {
-  return { error, join };
+const useGetStarted = () => {
+  return { error, getStarted };
 };
 
-export default useJoin;
+export default useGetStarted;

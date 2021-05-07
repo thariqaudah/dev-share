@@ -16,8 +16,8 @@
             <router-link class="a" :to="{ name: 'Login' }">Login</router-link>
           </li>
           <li>
-            <router-link class="btn btn-primary" :to="{ name: 'Join' }"
-              >Join Us</router-link
+            <router-link class="btn btn-primary" :to="{ name: 'GetStarted' }"
+              >Get Started</router-link
             >
           </li>
         </div>
@@ -28,11 +28,10 @@
             >
           </li>
           <li>
-            <router-link
-              class="btn btn-primary"
-              :to="{ name: 'Join' }"
+            <button
+              class="btn btn-secondary"
               @click="handleLogout"
-              >Log out</router-link
+              >Log out</button
             >
           </li>
         </div>

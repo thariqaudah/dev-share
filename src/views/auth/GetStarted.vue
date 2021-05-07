@@ -1,7 +1,7 @@
 <template>
-  <div class="join container">
+  <div class="get-started container">
     <form @submit.prevent="handleSubmit">
-      <h1><i class="fas fa-user-plus"></i> Join Us</h1>
+      <h1><i class="fas fa-user-plus"></i> Get Started</h1>
 
       <div class="error" v-if="error">{{ error }}</div>
 
@@ -11,8 +11,8 @@
       <input type="email" id="email" v-model="email" />
       <label for="password">Password</label>
       <input type="password" id="password" v-model="password" />
-      <button class="btn-primary" type="submit" v-if="!isLoading">Join</button>
-      <button class="btn-primary" type="submit" disabled v-else>
+      <button class="btn btn-primary" type="submit" v-if="!isLoading">Get Started</button>
+      <button class="btn btn-primary" type="submit" disabled v-else>
         Loading...
       </button>
       <small
@@ -26,12 +26,12 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import useJoin from '@/composables/useJoin';
+import useGetStarted from '@/composables/useGetStarted';
 
 export default {
-  name: 'Join',
+  name: 'GetStarted',
   setup() {
-    const { error, join } = useJoin();
+    const { error, getStarted } = useGetStarted();
     const router = useRouter();
 
     const name = ref('');
@@ -41,7 +41,7 @@ export default {
 
     const handleSubmit = async () => {
       isLoading.value = true;
-      await join(name.value, email.value, password.value);
+      await getStarted(name.value, email.value, password.value);
 
       if (!error.value) {
         router.push({ name: 'Home' });

@@ -9,13 +9,13 @@
       <input type="email" id="email" v-model="email" />
       <label for="password">Password</label>
       <input type="password" id="password" v-model="password" />
-      <button class="btn-primary" type="submit" v-if="!isLoading">Login</button>
-      <button class="btn-primary" disabled type="submit" v-else>
+      <button class="btn btn-primary" type="submit" v-if="!isLoading">Login</button>
+      <button class="btn btn-primary" disabled type="submit" v-else>
         Loading...
       </button>
       <small
         >Not have an account yet? Let's
-        <router-link :to="{ name: 'Join' }">Join</router-link></small
+        <router-link :to="{ name: 'GetStarted' }">Get Started</router-link></small
       >
     </form>
   </div>

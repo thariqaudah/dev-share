@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import About from '../views/About.vue';
 import Login from '../views/auth/Login.vue';
-import Join from '../views/auth/Join.vue';
+import GetStarted from '../views/auth/GetStarted.vue';
 import CreateArticle from '../views/articles/CreateArticle.vue';
 
 const routes = [
@@ -22,9 +22,9 @@ const routes = [
     component: Login,
   },
   {
-    path: '/join',
-    name: 'Join',
-    component: Join,
+    path: '/get-started',
+    name: 'GetStarted',
+    component: GetStarted,
   },
   {
     path: '/article/create',

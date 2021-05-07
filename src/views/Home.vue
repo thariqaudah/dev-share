@@ -8,8 +8,8 @@
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis
           placeat eaque minima assumenda eligendi et!
         </p>
-        <router-link class="btn btn-primary" :to="{ name: 'Join' }"
-          >Join Us</router-link
+        <router-link class="btn btn-primary" :to="{ name: 'GetStarted' }"
+          >Get Started</router-link
         >
       </div>
     </section>
@@ -50,8 +50,11 @@ export default {
 }
 .showcase .text a {
   margin-top: 20px;
+  transition: all 0.1s;
 }
 .showcase .text a:hover {
   transform: scale(1.02);
+  background: var(--primary-color);
+  color: #fff;
 }
 </style>
