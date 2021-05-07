@@ -5,11 +5,7 @@
       <label for="title">Title</label>
       <input type="text" id="title" v-model="title" />
       <label for="content">Content</label>
-      <ckeditor
-        :editor="editor"
-        :config="editorConfig"
-        v-model="content"
-      ></ckeditor>
+      <textarea id="content" v-model="content"></textarea>
       <!-- Tags -->
       <label for="tags">Add Tags (Press "tab" to add)</label>
       <input type="text" id="tags" v-model="tag" @keydown.prevent.tab="addTag" />
@@ -44,17 +40,11 @@
 
 <script>
 import { ref } from 'vue';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import useCollection from '@/composables/useCollection';
+// import useCollection from '@/composables/useCollection';
 
 export default {
   setup() {
-    const editor = ClassicEditor;
-    const editorConfig = {
-      toolbar: ['bold', 'italic', '|', 'link']
-    };
-
-    const { error, addDoc } = useCollection('articles');
+    // const { error, addDoc } = useCollection('articles');
 
     const title = ref('');
     const content = ref('');
@@ -74,21 +64,21 @@ export default {
     }
 
     const handleSubmit = async () => {
-      await addDoc({
-        title: title.value,
-        content: content.value,
-        tags: tags.value,
-        level: level.value,
-        status: status.value
-      }); 
+      // await addDoc({
+      //   title: title.value,
+      //   content: content.value,
+      //   tags: tags.value,
+      //   level: level.value,
+      //   status: status.value
+      // }); 
 
-      if(!error.value) {
-        console.log('success add doc')
-      }
-      // console.log(title.value, content.value, tags.value, level.value, status.value);
+      // if(!error.value) {
+      //   console.log('success add doc')
+      // }
+      console.log(title.value, content.value, tags.value, level.value, status.value);
     };
 
-    return { editor, editorConfig, title, content, tags, tag, level, status, addTag, removeTag, handleSubmit };
+    return { title, content, tags, tag, level, status, addTag, removeTag, handleSubmit };
   },
 };
 </script>
@@ -138,8 +128,9 @@ form .tags-container div {
   color: #fff;
   padding: 10px;
   cursor: pointer;
+  font-size: 14px;
 }
 form .tags-container div:hover {
-  background-color: #d84848;
+  opacity: 0.5;
 }
 </style>

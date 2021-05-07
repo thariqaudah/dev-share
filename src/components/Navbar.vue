@@ -93,6 +93,9 @@ a:hover,
 .a:hover {
   color: var(--primary-color);
 }
+.btn:hover, .btn.router-link-exact-active {
+  color: #fff;
+}
 .nav-auth {
   margin-left: auto;
 }

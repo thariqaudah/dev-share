@@ -72,6 +72,11 @@ select {
   color: inherit;
 }
 
+textarea {
+  height: 200px;
+  resize: vertical;
+}
+
 input:focus,
 textarea:focus,
 select:focus {
@@ -116,16 +121,8 @@ label {
   color: #fff;
 }
 
-.btn-primary:hover, .btn-primary.router-link-exact-active {
-  background: transparent;
-  border: 1px solid var(--primary-color);
-  color: var(--primary-color);
-}
-
-.btn-secondary:hover {
-  background: transparent;
-  border: 1px solid var(--secondary-color);
-  color: var(--secondary-color);
+.btn-primary:hover, .btn-secondary:hover, .btn-primary.router-link-exact-active {
+  opacity: 0.8;
 }
 
 button:disabled {
