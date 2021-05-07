@@ -10,8 +10,13 @@
         :config="editorConfig"
         v-model="content"
       ></ckeditor>
-      <label for="tags">Add   Tags</label>
-      <input type="text" id="tags" v-model="tags" />
+      <!-- Tags -->
+      <label for="tags">Add Tags (Press "tab" to add)</label>
+      <input type="text" id="tags" v-model="tag" @keydown.prevent.tab="addTag" />
+      <div class="tags-container" v-if="tags">
+        <div v-for="(eachTag, index) in tags" :key="index" @click="removeTag(index)">{{ eachTag }}</div>
+      </div>
+      <!-- Select -->
       <label for="level">Select Level</label>
       <select id="level" v-model="level">
         <option disabled value="">Select a reading level</option>
@@ -47,15 +52,26 @@ export default {
     const editor = ClassicEditor;
     const editorConfig = {
       toolbar: ['bold', 'italic', '|', 'link']
-    }
+    };
 
     const { error, addDoc } = useCollection('articles');
 
     const title = ref('');
     const content = ref('');
+    const tag = ref('');
     const tags = ref([]);
     const level = ref('');
     const status = ref('');
+
+    const addTag = () => {
+      tags.value.push(tag.value);
+      console.log(tags.value);
+      tag.value = '';
+    }
+
+    const removeTag = (index) => {
+      tags.value.splice(index, 1);
+    }
 
     const handleSubmit = async () => {
       await addDoc({
@@ -72,7 +88,7 @@ export default {
       // console.log(title.value, content.value, tags.value, level.value, status.value);
     };
 
-    return { editor, editorConfig, title, content, tags, level, status, handleSubmit };
+    return { editor, editorConfig, title, content, tags, tag, level, status, addTag, removeTag, handleSubmit };
   },
 };
 </script>
@@ -111,5 +127,19 @@ form .btn {
 }
 form .btn-primary {
   margin: 20px 0 10px;
+}
+form .tags-container {
+  display: flex;
+}
+form .tags-container div {
+  margin: 0 5px 20px 0;
+  background-color: var(--secondary-color);
+  border-radius: 20px;
+  color: #fff;
+  padding: 10px;
+  cursor: pointer;
+}
+form .tags-container div:hover {
+  background-color: #d84848;
 }
 </style>
