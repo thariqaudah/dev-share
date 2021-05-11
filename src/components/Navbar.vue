@@ -83,9 +83,6 @@ nav ul {
 nav li {
   margin-right: 5px;
 }
-nav a {
-  padding: 10px 12px;
-}
 .nav-auth {
   margin-left: auto;
 }
