@@ -8,9 +8,20 @@
       <textarea id="content" v-model="content"></textarea>
       <!-- Tags -->
       <label for="tags">Add Tags (Press "tab" to add)</label>
-      <input type="text" id="tags" v-model="tag" @keydown.prevent.tab="addTag" />
+      <input
+        type="text"
+        id="tags"
+        v-model="tag"
+        @keydown.prevent.tab="addTag"
+      />
       <div class="tags-container" v-if="tags">
-        <div v-for="(eachTag, index) in tags" :key="index" @click="removeTag(index)">{{ eachTag }}</div>
+        <div
+          v-for="(eachTag, index) in tags"
+          :key="index"
+          @click="removeTag(index)"
+        >
+          {{ eachTag }}
+        </div>
       </div>
       <!-- Select -->
       <label for="level">Select Level</label>
@@ -23,28 +34,30 @@
       <!-- Radio btn -->
       <p>Save as</p>
       <div class="radio-input">
-        <input type="radio" value="public" id="public" v-model="status">
+        <input type="radio" value="public" id="public" v-model="status" />
         <label for="public">Public</label>
-        <input type="radio" value="private" id="private" v-model="status">
+        <input type="radio" value="private" id="private" v-model="status" />
         <label for="private">Private</label>
       </div>
       <!-- Image -->
       <label for="image">Cover Image</label>
       <input type="file" id="image" />
       <!-- Button -->
-      <button type="submit" class="btn btn-primary">Save</button>
-      <button type="button" class="btn btn-secondary">Cancel</button>
+      <div class="action">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary">Cancel</button>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue';
-// import useCollection from '@/composables/useCollection';
+import useCollection from '@/composables/useCollection';
 
 export default {
   setup() {
-    // const { error, addDoc } = useCollection('articles');
+    const { error, addDoc } = useCollection('articles');
 
     const title = ref('');
     const content = ref('');
@@ -54,31 +67,42 @@ export default {
     const status = ref('');
 
     const addTag = () => {
-      tags.value.push(tag.value);
-      console.log(tags.value);
-      tag.value = '';
-    }
+      if (tag.value) {
+        tags.value.push(tag.value);
+        console.log(tags.value);
+        tag.value = '';
+      }
+    };
 
     const removeTag = (index) => {
       tags.value.splice(index, 1);
-    }
-
-    const handleSubmit = async () => {
-      // await addDoc({
-      //   title: title.value,
-      //   content: content.value,
-      //   tags: tags.value,
-      //   level: level.value,
-      //   status: status.value
-      // }); 
-
-      // if(!error.value) {
-      //   console.log('success add doc')
-      // }
-      console.log(title.value, content.value, tags.value, level.value, status.value);
     };
 
-    return { title, content, tags, tag, level, status, addTag, removeTag, handleSubmit };
+    const handleSubmit = async () => {
+      await addDoc({
+        title: title.value,
+        content: content.value,
+        tags: tags.value,
+        level: level.value,
+        status: status.value,
+      });
+
+      if (!error.value) {
+        console.log('success add doc');
+      }
+    };
+
+    return {
+      title,
+      content,
+      tags,
+      tag,
+      level,
+      status,
+      addTag,
+      removeTag,
+      handleSubmit,
+    };
   },
 };
 </script>
@@ -94,35 +118,17 @@ form h1 {
   margin-bottom: 30px;
   font-size: 1.8rem;
 }
-form label, form p {
+form label,
+form p {
   display: inline-block;
   margin-bottom: 10px;
   font-weight: 600;
-}
-form input[type="file"] {
-  border: none;
-}
-form .radio-input {
-  margin-bottom: 20px;
-}
-form .radio-input label {
-  font-weight: normal;
-  margin: 0 20px 0 5px;
-}
-form .radio-input input {
-  margin: 0;
-}
-form .btn {
-  font-weight: 600;;
-}
-form .btn-primary {
-  margin: 20px 0 10px;
 }
 form .tags-container {
   display: flex;
 }
 form .tags-container div {
-  margin: 0 5px 20px 0;
+  margin: -20px 5px 20px 0;
   background-color: var(--secondary-color);
   border-radius: 20px;
   color: #fff;
@@ -131,6 +137,26 @@ form .tags-container div {
   font-size: 14px;
 }
 form .tags-container div:hover {
-  opacity: 0.5;
+  opacity: 0.3;
+}
+form .radio-input label {
+  font-weight: normal;
+  margin-right: 20px;
+}
+form .radio-input input {
+  width: auto;
+  margin-right: 5px;
+}
+form input[type='file'] {
+  border: none;
+}
+form .btn {
+  font-weight: 600;
+}
+form .btn-primary {
+  margin: 20px 0 10px;
+}
+form .action button {
+  margin-right: 10px;
 }
 </style>

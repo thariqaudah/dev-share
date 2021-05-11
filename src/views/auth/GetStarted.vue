@@ -11,10 +11,15 @@
       <input type="email" id="email" v-model="email" />
       <label for="password">Password</label>
       <input type="password" id="password" v-model="password" />
-      <button class="btn btn-primary" type="submit" v-if="!isLoading">Get Started</button>
-      <button class="btn btn-primary" type="submit" disabled v-else>
-        Loading...
-      </button>
+      <div class="action">
+        <button class="btn btn-primary" type="submit" v-if="!isLoading">
+          Get Started
+        </button>
+        <button class="btn btn-primary" type="submit" disabled v-else>
+          Loading...
+        </button>
+        <router-link to="">Forgot password</router-link>
+      </div>
       <small
         >Already join? Please
         <router-link :to="{ name: 'Login' }">Login</router-link></small
@@ -65,6 +70,14 @@ h1 {
 i {
   color: var(--primary-color);
 }
+button[type='submit'] {
+  font-weight: 600;
+}
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 small {
   font-size: 14px;
   margin-top: 30px;
@@ -72,9 +85,6 @@ small {
 }
 small a {
   color: var(--primary-color);
-  font-weight: 600;
-}
-button[type='submit'] {
   font-weight: 600;
 }
 </style>

@@ -28,11 +28,9 @@
             >
           </li>
           <li>
-            <button
-              class="btn btn-secondary"
-              @click="handleLogout"
-              >Log out</button
-            >
+            <button class="btn btn-primary" @click="handleLogout">
+              Log out
+            </button>
           </li>
         </div>
       </ul>
@@ -87,14 +85,6 @@ nav li {
 }
 nav a {
   padding: 10px 12px;
-}
-a:hover,
-.router-link-exact-active,
-.a:hover {
-  color: var(--primary-color);
-}
-.btn:hover, .btn.router-link-exact-active {
-  color: #fff;
 }
 .nav-auth {
   margin-left: auto;
