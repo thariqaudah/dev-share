@@ -1,6 +1,6 @@
 <template>
   <div class="showcase">
-    <h1>In DevShare, You can share and get some inspirations</h1>
+    <h1>In DevShare, you can share and get some inspirations</h1>
     <router-link class="btn btn-primary" :to="{ name: 'GetStarted' }"
       >Get Started With DevShare</router-link
     >

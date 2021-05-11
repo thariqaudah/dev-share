@@ -1,15 +1,31 @@
 <template>
   <div class="home">
-    <Showcase />
+    <Showcase v-if="!user" />
+    {{ articles }}
   </div>
 </template>
 
 <script>
-import Showcase from '../components/Showcase.vue'
+import { onMounted } from 'vue';
+import Showcase from '../components/Showcase.vue';
+import getUser from '@/composables/getUser';
+import getCollection from '@/composables/getCollection';
 
 export default {
   name: 'Home',
-  components: { Showcase }
+  components: { Showcase },
+  setup() {
+    const { user } = getUser();
+    const { error, documents: articles, getDocs } = getCollection('articles');
+
+    const fetchData = async () => {
+      await getDocs();   
+    }
+
+    onMounted(async () => await fetchData());
+
+    return { error, articles, user };
+  }
 };
 </script>
 

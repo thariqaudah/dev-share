@@ -2,6 +2,7 @@
   <div class="create-article container">
     <form @submit.prevent="handleSubmit">
       <h1>Create New Article</h1>
+      <div class="error" v-if="error">{{ error }}</div>
       <label for="title">Title</label>
       <input type="text" id="title" v-model="title" />
       <label for="content">Content</label>
@@ -41,10 +42,12 @@
       </div>
       <!-- Image -->
       <label for="image">Cover Image</label>
-      <input type="file" id="image" />
+      <div class="error" v-if="errorFile">{{ errorFile }}</div>
+      <input type="file" id="image" @change="handleFile" />
       <!-- Button -->
       <div class="action">
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary" v-if="!isLoading">Save</button>
+        <button type="submit" disabled class="btn btn-primary" v-else>Saving...</button>
         <button type="button" class="btn btn-secondary">Cancel</button>
       </div>
     </form>
@@ -54,10 +57,12 @@
 <script>
 import { ref } from 'vue';
 import useCollection from '@/composables/useCollection';
+import useStorage from '@/composables/useStorage';
 
 export default {
   setup() {
     const { error, addDoc } = useCollection('articles');
+    const { filePath, publicUrl, uploadImage } = useStorage();
 
     const title = ref('');
     const content = ref('');
@@ -65,6 +70,9 @@ export default {
     const tags = ref([]);
     const level = ref('');
     const status = ref('');
+    const file = ref(null);
+    const errorFile = ref(null);
+    const isLoading = ref(false);
 
     const addTag = () => {
       if (tag.value) {
@@ -78,21 +86,48 @@ export default {
       tags.value.splice(index, 1);
     };
 
-    const handleSubmit = async () => {
-      await addDoc({
-        title: title.value,
-        content: content.value,
-        tags: tags.value,
-        level: level.value,
-        status: status.value,
-      });
+    const handleFile = (e) => {
+      file.value = e.target.files[0];
+      if(!file.value || !file.value.type.includes('image')) {
+        errorFile.value = 'Please select an image';
+      } else {
+        errorFile.value = null;
+        console.log('file ready');
+      }
+    }
 
-      if (!error.value) {
-        console.log('success add doc');
+    const handleSubmit = async () => {
+      if(title.value == '' || content.value == '' || level.value == '' || status.value == '' || errorFile.value ) {
+        error.value = 'All fields are required'
+      } else {
+        isLoading.value = true;
+        // Upload the cover image first
+        await uploadImage(file.value);
+
+        // Submit doc to firestore
+        await addDoc({
+          title: title.value,
+          content: content.value,
+          tags: tags.value,
+          level: level.value,
+          status: status.value,
+          image: {
+            filePath: filePath.value,
+            publicUrl: publicUrl.value
+          }
+        });
+
+        isLoading.value = false;
+        
+        if (!error.value) {
+          console.log('success add doc');
+        }
       }
     };
 
     return {
+      error,
+      errorFile,
       title,
       content,
       tags,
@@ -101,7 +136,9 @@ export default {
       status,
       addTag,
       removeTag,
+      handleFile,
       handleSubmit,
+      isLoading
     };
   },
 };
