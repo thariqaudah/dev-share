@@ -1,7 +1,7 @@
 <template>
   <div class="create-article container">
-    <form @submit.prevent="handleSubmit">
-      <h1>Create New Article</h1>
+    <form class="card" @submit.prevent="handleSubmit">
+      <h1 class="border-bottom">Create New Article</h1>
       <div class="error" v-if="error">{{ error }}</div>
       <label for="title">Title</label>
       <input type="text" id="title" v-model="title" />
@@ -46,8 +46,12 @@
       <input type="file" id="image" @change="handleFile" />
       <!-- Button -->
       <div class="action">
-        <button type="submit" class="btn btn-primary" v-if="!isLoading">Save</button>
-        <button type="submit" disabled class="btn btn-primary" v-else>Saving...</button>
+        <button type="submit" class="btn btn-primary" v-if="!isLoading">
+          Save
+        </button>
+        <button type="submit" disabled class="btn btn-primary" v-else>
+          Saving...
+        </button>
         <button type="button" class="btn btn-secondary">Cancel</button>
       </div>
     </form>
@@ -58,11 +62,15 @@
 import { ref } from 'vue';
 import useCollection from '@/composables/useCollection';
 import useStorage from '@/composables/useStorage';
+import getUser from '@/composables/getUser';
+import { timestamp } from '@/firebase/config';
 
 export default {
   setup() {
     const { error, addDoc } = useCollection('articles');
     const { filePath, publicUrl, uploadImage } = useStorage();
+    const { user } = getUser();
+    console.log(user.value);
 
     const title = ref('');
     const content = ref('');
@@ -88,17 +96,23 @@ export default {
 
     const handleFile = (e) => {
       file.value = e.target.files[0];
-      if(!file.value || !file.value.type.includes('image')) {
+      if (!file.value || !file.value.type.includes('image')) {
         errorFile.value = 'Please select an image';
       } else {
         errorFile.value = null;
         console.log('file ready');
       }
-    }
+    };
 
     const handleSubmit = async () => {
-      if(title.value == '' || content.value == '' || level.value == '' || status.value == '' || errorFile.value ) {
-        error.value = 'All fields are required'
+      if (
+        title.value == '' ||
+        content.value == '' ||
+        level.value == '' ||
+        status.value == '' ||
+        errorFile.value
+      ) {
+        error.value = 'All fields are required';
       } else {
         isLoading.value = true;
         // Upload the cover image first
@@ -113,12 +127,17 @@ export default {
           status: status.value,
           image: {
             filePath: filePath.value,
-            publicUrl: publicUrl.value
-          }
+            publicUrl: publicUrl.value,
+          },
+          user: {
+            id: user.value.uid,
+            displayName: user.value.displayName,
+          },
+          createdAt: timestamp(),
         });
 
         isLoading.value = false;
-        
+
         if (!error.value) {
           console.log('success add doc');
         }
@@ -138,7 +157,7 @@ export default {
       removeTag,
       handleFile,
       handleSubmit,
-      isLoading
+      isLoading,
     };
   },
 };
@@ -150,8 +169,6 @@ form {
   margin: auto;
 }
 form h1 {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
   margin-bottom: 30px;
   font-size: 1.8rem;
 }
@@ -159,7 +176,6 @@ form label,
 form p {
   display: inline-block;
   margin-bottom: 10px;
-  font-weight: 600;
 }
 form .tags-container {
   display: flex;
