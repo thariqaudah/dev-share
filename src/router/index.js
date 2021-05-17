@@ -33,7 +33,7 @@ const routes = [
     component: CreateArticle,
   },
   {
-    path: '/article/:id',
+    path: '/article/details/:id',
     name: 'SingleArticle',
     component: SingleArticle,
     props: true,

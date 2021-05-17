@@ -1,7 +1,7 @@
 <template>
-  <div class="home container">
+  <div class="home">
     <Showcase v-if="!user" />
-    <main v-else>
+    <main class="container" v-else>
       <UserBox :user="user" />
       <ListArticles :articles="articles" />
       <SearchBox />
@@ -41,5 +41,6 @@ main {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   column-gap: 20px;
+  margin-top: 20px;
 }
 </style>

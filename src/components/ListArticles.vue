@@ -8,6 +8,11 @@
       <p class="snippet">
         {{ article.snippet }}
       </p>
+      <span>
+        <router-link :to="{ name: 'SingleArticle', params: { id: article.id } }"
+        >Read more</router-link
+      >
+      </span>
       <div class="article-info border-top">
         <span class="publishing-time"
           ><i class="fas fa-calendar"></i> {{ article.formattedDate }}</span
