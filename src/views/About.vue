@@ -23,8 +23,11 @@ export default {};
 </script>
 
 <style scoped>
+.about {
+  margin-top: 20px;
+}
 h1 {
-  margin: 50px 0 20px;
+  margin-bottom: 20px;
 }
 p {
   margin-bottom: 10px;

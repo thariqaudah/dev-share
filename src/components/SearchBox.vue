@@ -14,6 +14,9 @@ export default {
 </script>
 
 <style scoped>
+.search-box {
+  align-self: start;
+}
 h4 {
   margin-bottom: 20px;
 }

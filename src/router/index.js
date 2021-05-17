@@ -5,6 +5,7 @@ import Login from '../views/auth/Login.vue';
 import GetStarted from '../views/auth/GetStarted.vue';
 import CreateArticle from '../views/articles/CreateArticle.vue';
 import SingleArticle from '../views/articles/SingleArticle.vue';
+import IndexDashboard from '../views/dashboard/index.vue';
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
     name: 'SingleArticle',
     component: SingleArticle,
     props: true,
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: IndexDashboard,
   },
 ];
 

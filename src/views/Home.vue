@@ -2,7 +2,8 @@
   <div class="home">
     <Showcase v-if="!user" />
     <main class="container" v-else>
-      <UserBox :user="user" />
+      <!-- <UserBox :user="user" /> -->
+      <CategoriesBox />
       <ListArticles :articles="articles" />
       <SearchBox />
     </main>
@@ -15,12 +16,12 @@ import getUser from '@/composables/getUser';
 import getCollection from '@/composables/getCollection';
 import Showcase from '../components/Showcase.vue';
 import ListArticles from '../components/ListArticles.vue';
-import UserBox from '../components/UserBox.vue';
+import CategoriesBox from '../components/CategoriesBox.vue';
 import SearchBox from '../components/SearchBox.vue';
 
 export default {
   name: 'Home',
-  components: { Showcase, ListArticles, UserBox, SearchBox },
+  components: { Showcase, ListArticles, CategoriesBox, SearchBox },
   setup() {
     const { user } = getUser();
     const { error, documents: articles, getDocs } = getCollection('articles');
@@ -40,6 +41,7 @@ export default {
 main {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: unset;
   column-gap: 20px;
   margin-top: 20px;
 }

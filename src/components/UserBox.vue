@@ -32,6 +32,9 @@ export default {
 </script>
 
 <style scoped>
+.user-box {
+  align-self: start;
+}
 h4 {
   margin-bottom: 20px;
 }

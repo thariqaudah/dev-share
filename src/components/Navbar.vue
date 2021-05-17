@@ -23,8 +23,8 @@
         </div>
         <div v-if="user">
           <li>
-            <router-link class="a" :to="{ name: 'CreateArticle' }"
-              >Create Article</router-link
+            <router-link class="a" :to="{ name: 'Dashboard' }"
+              >Dashboard</router-link
             >
           </li>
           <li>
