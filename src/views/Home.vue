@@ -1,20 +1,26 @@
 <template>
-  <div class="home">
+  <div class="home container">
     <Showcase v-if="!user" />
-    <ListArticles :articles="articles" />
+    <main v-else>
+      <UserBox :user="user" />
+      <ListArticles :articles="articles" />
+      <SearchBox />
+    </main>
   </div>
 </template>
 
 <script>
 import { onMounted } from 'vue';
-import Showcase from '../components/Showcase.vue';
-import ListArticles from '../components/ListArticles.vue';
 import getUser from '@/composables/getUser';
 import getCollection from '@/composables/getCollection';
+import Showcase from '../components/Showcase.vue';
+import ListArticles from '../components/ListArticles.vue';
+import UserBox from '../components/UserBox.vue';
+import SearchBox from '../components/SearchBox.vue';
 
 export default {
   name: 'Home',
-  components: { Showcase, ListArticles },
+  components: { Showcase, ListArticles, UserBox, SearchBox },
   setup() {
     const { user } = getUser();
     const { error, documents: articles, getDocs } = getCollection('articles');
@@ -31,8 +37,9 @@ export default {
 </script>
 
 <style scoped>
-.home {
-  /* display: grid;
-  grid-template-columns: 1fr 2fr 1fr; */
+main {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  column-gap: 20px;
 }
 </style>

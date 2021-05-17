@@ -4,6 +4,7 @@ import About from '../views/About.vue';
 import Login from '../views/auth/Login.vue';
 import GetStarted from '../views/auth/GetStarted.vue';
 import CreateArticle from '../views/articles/CreateArticle.vue';
+import SingleArticle from '../views/articles/SingleArticle.vue';
 
 const routes = [
   {
@@ -30,6 +31,12 @@ const routes = [
     path: '/article/create',
     name: 'CreateArticle',
     component: CreateArticle,
+  },
+  {
+    path: '/article/:id',
+    name: 'SingleArticle',
+    component: SingleArticle,
+    props: true,
   },
 ];
 

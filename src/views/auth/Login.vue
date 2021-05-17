@@ -1,6 +1,6 @@
 <template>
   <div class="login container">
-    <form @submit.prevent="handleSubmit">
+    <form class="card" @submit.prevent="handleSubmit">
       <h1><i class="fas fa-sign-in-alt"></i> Login</h1>
 
       <div class="error" v-if="error">{{ error }}</div>

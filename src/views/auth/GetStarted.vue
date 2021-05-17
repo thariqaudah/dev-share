@@ -1,6 +1,6 @@
 <template>
   <div class="get-started container">
-    <form @submit.prevent="handleSubmit">
+    <form class="card" @submit.prevent="handleSubmit">
       <h1><i class="fas fa-user-plus"></i> Get Started</h1>
 
       <div class="error" v-if="error">{{ error }}</div>
