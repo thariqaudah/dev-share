@@ -1,7 +1,7 @@
 <template>
-  <div class="create-article container">
+  <div class="edit-article container">
     <form class="card" @submit.prevent="handleSubmit">
-      <h1 class="border-bottom">Create Article</h1>
+      <h1 class="border-bottom">Edit Article</h1>
       <div class="error" v-if="error">{{ error }}</div>
       <label for="title">Title</label>
       <input type="text" id="title" v-model="title" />
@@ -42,7 +42,7 @@
       <!-- Button -->
       <div class="action">
         <button type="submit" class="btn btn-primary" v-if="!isLoading">
-          Save
+          Save Change
         </button>
         <button type="submit" disabled class="btn btn-primary" v-else>
           Saving...
@@ -58,18 +58,19 @@
 <script>
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import getDocument from '@/composables/getDocument';
 import getCollection from '@/composables/getCollection';
-import useCollection from '@/composables/useCollection';
+import useDocument from '@/composables/useDocument';
 import useStorage from '@/composables/useStorage';
-import getUser from '@/composables/getUser';
 import { timestamp } from '@/firebase/config';
 
 export default {
-  setup() {
+  props: ['id'],
+  setup(props) {
+    const { document: article, getDoc } = getDocument('articles', props.id);
     const { getDocs, documents: categories } = getCollection('categories');
-    const { error, addDoc } = useCollection('articles');
+    const { error, updateDoc } = useDocument('articles', props.id);
     const { filePath, publicUrl, uploadImage } = useStorage();
-    const { user } = getUser();
     const router = useRouter();
 
     // Refs
@@ -78,7 +79,7 @@ export default {
     const tag = ref('');
     const tags = ref([]);
     const category = ref('');
-    const selectedCategory = ref({});
+    const selectedCategory = ref(null);
     const file = ref(null);
     const errorFile = ref(null);
     const isLoading = ref(false);
@@ -86,7 +87,14 @@ export default {
     // Fetch categories collection
     const fetchDocuments = async () => {
       await getDocs();
-      console.log(categories.value);
+      await getDoc();
+      
+      if (article.value) {
+        title.value = article.value.title;
+        content.value = article.value.content;
+        tags.value = article.value.tags;
+        category.value = article.value.category.id;
+      }
     };
 
     // Add tag
@@ -103,13 +111,14 @@ export default {
       tags.value.splice(index, 1);
     };
 
+    // Handle change in select input
     const handleChange = () => {
       selectedCategory.value = categories.value.filter(
         (cat) => cat.id == category.value
       );
-      console.log(selectedCategory.value);
     };
 
+    // Hanlde file input
     const handleFile = (e) => {
       file.value = e.target.files[0];
       if (!file.value || !file.value.type.includes('image')) {
@@ -119,6 +128,7 @@ export default {
       }
     };
 
+    // Submit document
     const handleSubmit = async () => {
       if (
         title.value == '' ||
@@ -128,12 +138,18 @@ export default {
       ) {
         error.value = 'All fields are required';
       } else {
+        if (!selectedCategory.value) {
+          selectedCategory.value = categories.value.filter(
+            (cat) => cat.id == article.value.category.id
+          );
+        }
+
         isLoading.value = true;
         // Upload the cover image first
         await uploadImage(file.value);
 
         // Submit doc to firestore
-        await addDoc({
+        await updateDoc({
           title: title.value,
           content: content.value,
           tags: tags.value,
@@ -145,17 +161,13 @@ export default {
             filePath: filePath.value,
             publicUrl: publicUrl.value,
           },
-          user: {
-            id: user.value.uid,
-            displayName: user.value.displayName,
-          },
           createdAt: timestamp(),
         });
 
         isLoading.value = false;
 
         if (!error.value) {
-          console.log('success add doc');
+          console.log('success update doc');
           router.push({ name: 'Dashboard' });
         }
       }

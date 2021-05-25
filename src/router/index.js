@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { auth } from '../firebase/config'
 import Home from '../views/Home.vue';
 import About from '../views/About.vue';
 
@@ -9,8 +10,19 @@ import IndexArticles from '../views/articles/IndexArticles.vue';
 import CreateArticle from '../views/articles/CreateArticle.vue';
 import SingleArticle from '../views/articles/SingleArticle.vue';
 import QueryArticles from '../views/articles/QueryArticles.vue';
+import EditArticle from '../views/articles/EditArticle.vue';
 
 import IndexDashboard from '../views/dashboard/IndexDashboard.vue';
+
+// Auth guard
+const requireAuth = (to, from, next) => {
+  const user = auth.currentUser;
+  if (user) {
+    next();
+  } else {
+    next({ name: 'Home' });
+  }
+}
 
 const routes = [
   // Articles routes
@@ -28,6 +40,7 @@ const routes = [
     path: '/articles/create',
     name: 'CreateArticle',
     component: CreateArticle,
+    beforeEnter: requireAuth
   },
   {
     path: '/articles/:id',
@@ -44,6 +57,12 @@ const routes = [
     path: '/articles/users/:userId',
     name: 'UserArticles',
     component: QueryArticles,
+  },
+  {
+    path: '/articles/edit/:id',
+    name: 'EditArticle',
+    component: EditArticle,
+    props: true
   },
   // About route
   {
@@ -67,6 +86,7 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: IndexDashboard,
+    beforeEnter: requireAuth
   },
 ];
 
