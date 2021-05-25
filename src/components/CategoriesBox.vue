@@ -2,17 +2,35 @@
   <div class="categories-box card">
     <h4 class="border-bottom">Categories</h4>
     <ul>
-      <li><router-link to=""><h5>Web Development</h5></router-link></li>
-      <li><router-link to=""><h5>Frontend Dev</h5></router-link></li>
-      <li><router-link to=""><h5>Backend Dev</h5></router-link></li>
-      <li><router-link to=""><h5>Machine Learning</h5></router-link></li>
+      <li v-for="category in categories" :key="category.id">
+        <router-link
+          :to="{ name: 'CategoryArticles', params: { catId: category.id } }"
+          ><h5>{{ category.name }}</h5></router-link
+        >
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { onMounted } from 'vue';
+import getCollection from '@/composables/getCollection';
+
 export default {
-  name: 'CategoriesBox'
+  name: 'CategoriesBox',
+  setup() {
+    const { error, documents: categories, getDocs } = getCollection(
+      'categories'
+    );
+
+    const fetchDocuments = async () => {
+      await getDocs();
+    };
+
+    onMounted(async () => await fetchDocuments());
+
+    return { error, categories };
+  },
 };
 </script>
 

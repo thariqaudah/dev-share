@@ -39,14 +39,30 @@ body {
 }
 
 .second-card {
-  background-color: #eee
+  background-color: #eee;
 }
 
 .badge {
+  font-size: 14px;
   background-color: #eee;
   color: var(--primary-color);
   padding: 10px;
   border-radius: 20px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 0;
+}
+
+.breadcrumb li {
+  margin-right: 5px;
+}
+
+.breadcrumb a {
+  padding: 0;
 }
 
 .border-bottom {
@@ -82,7 +98,8 @@ a:hover,
   color: var(--primary-color);
 }
 
-p, article {
+p,
+article {
   line-height: 1.6;
   margin: 10px 0;
   text-align: justify;

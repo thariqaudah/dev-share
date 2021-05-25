@@ -2,28 +2,57 @@
   <div class="error container" v-if="error">{{ error }}</div>
   <div class="single-article container" v-if="article">
     <div class="card">
-      <!-- <nav>
-        TODO: breadcrumb
-      </nav> -->
+      <ol class="breadcrumb">
+        <li>
+          <router-link :to="{ name: 'IndexArticles' }"
+            ><h5>All Articles</h5></router-link
+          >
+        </li>
+        <li>/</li>
+        <li>
+          <router-link to="" class="active"
+            ><h5>{{ article.title }}</h5></router-link
+          >
+        </li>
+      </ol>
       <div class="cover">
-        <img :src="formattedArticle.image.publicUrl" alt="">
+        <img :src="formattedArticle.image.publicUrl" alt="" />
       </div>
       <h1>{{ article.title }}</h1>
       <div class="article-info">
-        <span><i class="fas fa-user"></i> <router-link to="">{{ formattedArticle.user.displayName }}</router-link></span>
-        <span><i class="fas fa-calendar"></i> {{ formattedArticle.formattedDate }}</span>
-        <span class="reading-time"><i class="fas fa-clock"></i>7 mins read</span>
+        <span
+          ><i class="fas fa-user"></i>
+          <router-link
+            class="author"
+            :to="{
+              name: 'UserArticles',
+              params: { userId: article.user.id },
+            }"
+            >{{ formattedArticle.user.displayName }}</router-link
+          ></span
+        >
+        <span
+          ><i class="fas fa-calendar"></i>
+          {{ formattedArticle.formattedDate }}</span
+        >
+        <span class="reading-time"
+          ><i class="fas fa-clock"></i>7 mins read</span
+        >
       </div>
       <article>
         {{ formattedArticle.content }}
       </article>
-      <div class="tags">
-        <p>Tags:</p>
-        <ul>
-          <li class="badge" v-for="(tag, index) in formattedArticle.tags" :key="index">
-            <router-link to="">{{ tag }}</router-link>
-          </li>
-        </ul>
+      <div class="category">
+        <span>Category:</span>
+        <span class="badge">
+          <router-link
+            :to="{
+              name: 'CategoryArticles',
+              params: { catId: formattedArticle.category.id },
+            }"
+            >{{ formattedArticle.category.name }}</router-link
+          >
+        </span>
       </div>
     </div>
   </div>
@@ -49,7 +78,10 @@ export default {
 
     const formattedArticle = computed(() => ({
       ...article.value,
-      formattedDate: dateformat(article.value.createdAt.toDate(), 'dddd, mmmm dS yyyy')
+      formattedDate: dateformat(
+        article.value.createdAt.toDate(),
+        'dddd, mmmm dS yyyy'
+      ),
     }));
 
     onMounted(async () => await fetchDocument());
@@ -60,11 +92,12 @@ export default {
 </script>
 
 <style scoped>
-.single-article, .error {
+.single-article,
+.error {
   margin-top: 20px;
 }
 .cover {
-  padding: 250px;
+  padding: 200px;
   position: relative;
   overflow: hidden;
 }
@@ -95,11 +128,13 @@ a {
 .article-info i {
   margin-right: 3px;
 }
-.tags {
+.article-info .author {
+  color: var(--primary-color);
+}
+.category {
   margin-top: 40px;
 }
-.tags li {
-  display: inline-block;
-  margin-right: 10px;
+.category .badge {
+  margin-left: 10px;
 }
 </style>

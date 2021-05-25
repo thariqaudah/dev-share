@@ -1,7 +1,7 @@
 <template>
   <div class="create-article container">
     <form class="card" @submit.prevent="handleSubmit">
-      <h1 class="border-bottom">Create New Article</h1>
+      <h1 class="border-bottom">Create Article</h1>
       <div class="error" v-if="error">{{ error }}</div>
       <label for="title">Title</label>
       <input type="text" id="title" v-model="title" />
@@ -25,21 +25,16 @@
         </div>
       </div>
       <!-- Select -->
-      <label for="level">Select Level</label>
-      <select id="level" v-model="level">
-        <option disabled value="">Select a reading level</option>
-        <option value="beginners">Beginners</option>
-        <option value="intermediates">Intermediates</option>
-        <option value="advanced">Advanced</option>
+      <label for="catgeory">Select Category</label>
+      <select id="catgeory" v-model="category" @change="handleChange">
+        <option disabled value="">Select a category</option>
+        <option
+          v-for="category in categories"
+          :key="category.id"
+          :value="category.id"
+          >{{ category.name }}</option
+        >
       </select>
-      <!-- Radio btn -->
-      <p>Save as</p>
-      <div class="radio-input">
-        <input type="radio" value="public" id="public" v-model="status" />
-        <label for="public">Public</label>
-        <input type="radio" value="private" id="private" v-model="status" />
-        <label for="private">Private</label>
-      </div>
       <!-- Image -->
       <label for="image">Cover Image</label>
       <div class="error" v-if="errorFile">{{ errorFile }}</div>
@@ -52,14 +47,17 @@
         <button type="submit" disabled class="btn btn-primary" v-else>
           Saving...
         </button>
-        <button type="button" class="btn btn-secondary">Cancel</button>
+        <router-link :to="{ name: 'Dashboard' }" class="btn btn-secondary"
+          >Cancel</router-link
+        >
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import getCollection from '@/composables/getCollection';
 import useCollection from '@/composables/useCollection';
 import useStorage from '@/composables/useStorage';
 import getUser from '@/composables/getUser';
@@ -67,21 +65,28 @@ import { timestamp } from '@/firebase/config';
 
 export default {
   setup() {
+    const { getDocs, documents: categories } = getCollection('categories');
     const { error, addDoc } = useCollection('articles');
     const { filePath, publicUrl, uploadImage } = useStorage();
     const { user } = getUser();
-    console.log(user.value);
 
     const title = ref('');
     const content = ref('');
     const tag = ref('');
     const tags = ref([]);
-    const level = ref('');
-    const status = ref('');
+    const category = ref('');
+    const selectedCategory = ref({});
     const file = ref(null);
     const errorFile = ref(null);
     const isLoading = ref(false);
 
+    // Fetch categories collection
+    const fetchDocuments = async () => {
+      await getDocs();
+      console.log(categories.value);
+    };
+
+    // Add tag
     const addTag = () => {
       if (tag.value) {
         tags.value.push(tag.value);
@@ -90,8 +95,16 @@ export default {
       }
     };
 
+    // Remove tag
     const removeTag = (index) => {
       tags.value.splice(index, 1);
+    };
+
+    const handleChange = () => {
+      selectedCategory.value = categories.value.filter(
+        (cat) => cat.id == category.value
+      );
+      console.log(selectedCategory.value);
     };
 
     const handleFile = (e) => {
@@ -100,7 +113,6 @@ export default {
         errorFile.value = 'Please select an image';
       } else {
         errorFile.value = null;
-        console.log('file ready');
       }
     };
 
@@ -108,8 +120,7 @@ export default {
       if (
         title.value == '' ||
         content.value == '' ||
-        level.value == '' ||
-        status.value == '' ||
+        category.value == {} ||
         errorFile.value
       ) {
         error.value = 'All fields are required';
@@ -123,8 +134,10 @@ export default {
           title: title.value,
           content: content.value,
           tags: tags.value,
-          level: level.value,
-          status: status.value,
+          category: {
+            id: selectedCategory.value[0].id,
+            name: selectedCategory.value[0].name,
+          },
           image: {
             filePath: filePath.value,
             publicUrl: publicUrl.value,
@@ -140,21 +153,28 @@ export default {
 
         if (!error.value) {
           console.log('success add doc');
+          // Push to dashboard
         }
       }
     };
 
+    // Mounted hooks
+    onMounted(async () => {
+      await fetchDocuments();
+    });
+
     return {
       error,
       errorFile,
+      categories,
       title,
       content,
       tags,
       tag,
-      level,
-      status,
+      category,
       addTag,
       removeTag,
+      handleChange,
       handleFile,
       handleSubmit,
       isLoading,

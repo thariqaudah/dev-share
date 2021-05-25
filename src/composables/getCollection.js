@@ -1,11 +1,15 @@
 import { db } from '../firebase/config';
 import { ref } from 'vue';
 
-const getCollection = (collection) => {
+const getCollection = (collection, query) => {
   const error = ref(null);
   const documents = ref([]);
 
   let collectionRef = db.collection(collection);
+
+  if (query) {
+    collectionRef = collectionRef.where(...query);
+  }
 
   const getDocs = async () => {
     error.value = null;

@@ -22,7 +22,7 @@ const getDocument = (collection, id) => {
       return res;
     } catch (err) {
       console.log(err);
-      error.value = 'Error fetching document';
+      error.value = err.message;
     }
   };
 

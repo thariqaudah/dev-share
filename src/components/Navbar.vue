@@ -2,13 +2,20 @@
   <div class="navbar">
     <nav class="container">
       <div class="brand">
-        <h2>Devshare</h2>
+        <router-link :to="{ name: 'Home' }">
+          <h2>Devshare</h2>
+        </router-link>
       </div>
       <ul class="nav-list">
-        <li><router-link :to="{ name: 'Home' }">Home</router-link></li>
+        <li>
+          <router-link :to="{ name: 'IndexArticles' }">Articles</router-link>
+        </li>
+        <li>
+          <router-link class="a" :to="{ name: 'Dashboard' }"
+            >Dashboard</router-link
+          >
+        </li>
         <li><router-link :to="{ name: 'About' }">About</router-link></li>
-        <!--- <li><router-link :to="{}">Categories</router-link></li>-->
-        <!-- <li><router-link to="">Saved</router-link></li> -->
       </ul>
       <ul class="nav-auth">
         <div v-if="!user">
@@ -22,11 +29,6 @@
           </li>
         </div>
         <div v-if="user">
-          <li>
-            <router-link class="a" :to="{ name: 'Dashboard' }"
-              >Dashboard</router-link
-            >
-          </li>
           <li>
             <button class="btn btn-primary" @click="handleLogout">
               Log out
@@ -76,6 +78,7 @@ export default {
   align-items: center;
 }
 .brand {
+  color: inherit;
   margin-right: 20px;
 }
 nav ul {
