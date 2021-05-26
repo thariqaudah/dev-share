@@ -2,9 +2,12 @@
   <div class="index-dashboard container">
     <h1>Dashboard</h1>
     <router-link class="btn btn-primary cta" :to="{ name: 'CreateArticle' }">
-      Create Article
+      <i class="fas fa-pen"></i> Create Article
     </router-link>
-    <table>
+    <div v-if="!formattedArticles.length">
+      <p>You have no article yet</p>
+    </div>
+    <table v-else>
       <tr>
         <th>Article Title</th>
         <th>Category</th>
@@ -12,19 +15,24 @@
         <th></th>
       </tr>
       <tr v-for="article in formattedArticles" :key="article.id">
-        <td><router-link :to="{ name: 'SingleArticle', params: { id: article.id }}">{{ article.title }}</router-link></td>
+        <td>
+          <router-link
+            :to="{ name: 'SingleArticle', params: { id: article.id } }"
+            >{{ article.title }}</router-link
+          >
+        </td>
         <td>{{ article.category.name }}</td>
         <td>{{ article.formattedDate }}</td>
         <td>
-          <router-link :to="{ name: 'EditArticle', params: { id: article.id }}"><i class="fas fa-edit"></i></router-link>
-          <button><i class="fas fa-trash-alt"></i></button>
+          <router-link :to="{ name: 'EditArticle', params: { id: article.id } }"
+            ><i class="fas fa-edit"></i
+          ></router-link>
+          <button @click="handleDelete(article.id)">
+            <i class="fas fa-trash-alt"></i>
+          </button>
         </td>
       </tr>
     </table>
-
-    <!-- TODO: -->
-    <!-- 1. table of user articles -->
-    <!-- 2. Action button to CRUD Article -->
   </div>
 </template>
 
@@ -32,6 +40,7 @@
 import { computed, onMounted } from 'vue';
 import getUser from '@/composables/getUser';
 import getCollection from '@/composables/getCollection';
+import useDocument from '@/composables/useDocument';
 import dateformat from 'dateformat';
 
 export default {
@@ -58,9 +67,17 @@ export default {
       }))
     );
 
+    const handleDelete = async (id) => {
+      const { error, deleteDoc } = useDocument('articles', id);
+      await deleteDoc();
+      if (!error.value) {
+        articles.value.splice(id, 1);
+      }
+    };
+
     onMounted(async () => await fetchData());
 
-    return { error, formattedArticles };
+    return { error, formattedArticles, handleDelete };
   },
 };
 </script>
@@ -73,7 +90,10 @@ h1 {
   margin-bottom: 40px;
 }
 .cta {
-  box-shadow: 0 0 0 rgba(0, 0, 0, .2);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+}
+.cta i {
+  margin-right: 5px;
 }
 table {
   margin-top: 20px;
@@ -84,11 +104,14 @@ table th {
   color: #fff;
   text-align: left;
 }
-table, th, td {
+table,
+th,
+td {
   border-bottom: 1px solid #ddd;
   border-collapse: collapse;
 }
-table th, table td {
+table th,
+table td {
   padding: 15px;
 }
 table td a {

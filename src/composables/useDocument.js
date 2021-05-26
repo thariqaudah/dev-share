@@ -8,7 +8,7 @@ const useDocument = (collection, id) => {
 
   const updateDoc = async (doc) => {
     error.value = null;
-    
+
     try {
       const res = await documentRef.update(doc);
       return res;
@@ -16,9 +16,20 @@ const useDocument = (collection, id) => {
       console.log(err);
       error.value = 'Error update document';
     }
-  }
+  };
 
-  return { error, updateDoc }
-}
+  const deleteDoc = async () => {
+    error.value = null;
+
+    try {
+      await documentRef.delete();
+    } catch (err) {
+      console.log(err);
+      error.value = 'Error remove document';
+    }
+  };
+
+  return { error, updateDoc, deleteDoc };
+};
 
 export default useDocument;

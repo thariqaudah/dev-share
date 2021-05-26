@@ -88,7 +88,7 @@ export default {
     const fetchDocuments = async () => {
       await getDocs();
       await getDoc();
-      
+
       if (article.value) {
         title.value = article.value.title;
         content.value = article.value.content;
@@ -145,6 +145,7 @@ export default {
         }
 
         isLoading.value = true;
+
         // Upload the cover image first
         await uploadImage(file.value);
 
