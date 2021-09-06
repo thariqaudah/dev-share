@@ -1,7 +1,7 @@
 <template>
   <div class="showcase">
     <h1>In DevShare, you can share and get some inspirations</h1>
-    <router-link class="btn btn-primary" :to="{ name: 'GetStarted' }"
+    <router-link :to="{ name: 'GetStarted' }" class="btn btn-primary"
       >Get Started With DevShare</router-link
     >
   </div>
@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'Showcase'
+  name: 'Showcase',
 }
 </script>
 
@@ -22,7 +22,6 @@ export default {
   justify-content: center;
   background-color: #eee;
   position: relative;
-  z-index: -100;
   border-bottom: 1px solid var(--primary-color);
 }
 .showcase h1 {

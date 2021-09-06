@@ -1,6 +1,7 @@
 <template>
   <div class="index-dashboard container">
     <h1>Dashboard</h1>
+    <h3>Welcome, {{ user.displayName }}</h3>
     <router-link class="btn btn-primary cta" :to="{ name: 'CreateArticle' }">
       <i class="fas fa-pen"></i> Create Article
     </router-link>
@@ -37,49 +38,49 @@
 </template>
 
 <script>
-import { computed, onMounted } from 'vue';
-import getUser from '@/composables/getUser';
-import getCollection from '@/composables/getCollection';
-import useDocument from '@/composables/useDocument';
-import dateformat from 'dateformat';
+import { computed, onMounted } from 'vue'
+import getUser from '@/composables/getUser'
+import getCollection from '@/composables/getCollection'
+import useDocument from '@/composables/useDocument'
+import dateformat from 'dateformat'
 
 export default {
   name: 'IndexDashboard',
   setup() {
-    const { user } = getUser();
+    const { user } = getUser()
     const { error, documents: articles, getDocs } = getCollection('articles', [
       'user.id',
       '==',
       user.value.uid,
-    ]);
+    ])
 
     const fetchData = async () => {
-      await getDocs();
-    };
+      await getDocs()
+    }
 
     const formattedArticles = computed(() =>
-      articles.value.map((article) => ({
+      articles.value.map(article => ({
         ...article,
         formattedDate: dateformat(
           article.createdAt.toDate(),
           'dddd, mmmm dS yyyy hh:MM tt'
         ),
       }))
-    );
+    )
 
-    const handleDelete = async (id) => {
-      const { error, deleteDoc } = useDocument('articles', id);
-      await deleteDoc();
+    const handleDelete = async id => {
+      const { error, deleteDoc } = useDocument('articles', id)
+      await deleteDoc()
       if (!error.value) {
-        articles.value.splice(id, 1);
+        articles.value.splice(id, 1)
       }
-    };
+    }
 
-    onMounted(async () => await fetchData());
+    onMounted(async () => await fetchData())
 
-    return { error, formattedArticles, handleDelete };
+    return { error, formattedArticles, user, handleDelete }
   },
-};
+}
 </script>
 
 <style scoped>
@@ -87,7 +88,10 @@ export default {
   margin-top: 20px;
 }
 h1 {
-  margin-bottom: 40px;
+  margin-bottom: 1rem;
+}
+h3 {
+  margin-bottom: 2rem;
 }
 .cta {
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
